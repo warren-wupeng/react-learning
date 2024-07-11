@@ -1,0 +1,9 @@
+{
+    "name": "tsc-play",
+    "dependencies": {
+        "typescript": "^5.5.2"
+    },
+    "scripts": {
+        "build": "tsc"
+    }
+}
