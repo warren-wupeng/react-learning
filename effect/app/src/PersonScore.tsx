@@ -1,5 +1,15 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useMemo, useCallback } from "react";
 import { getPerson } from "./getPerson";
+import { Reset } from "./Reset";
+
+function someExpensiveComputation() {
+  console.log("Expensive computation");
+  let sum = 0;
+  for (let i = 0; i < 10000; i++) {
+    sum += i;
+  }
+  return sum;
+}
 
 type State = {
   loading: boolean;
@@ -53,6 +63,10 @@ export function PersonScore() {
       addButtonRef.current?.focus();
     }
   }, [loading]);
+  const expensiveValue = useMemo(() => someExpensiveComputation(), []);
+  const handleReset = useCallback(() => {
+    dispatch({ type: "reset" });
+  }, []);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -61,6 +75,7 @@ export function PersonScore() {
       <h3>
         {name}, {score}
       </h3>
+      <p>Expensive value: {expensiveValue}</p>
       <button
         ref={addButtonRef}
         onClick={() => dispatch({ type: "increment" })}
@@ -68,7 +83,7 @@ export function PersonScore() {
         Add
       </button>
       <button onClick={() => dispatch({ type: "decrement" })}>Subtract</button>
-      <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+      <Reset onClick={handleReset} />
     </div>
   );
 }
